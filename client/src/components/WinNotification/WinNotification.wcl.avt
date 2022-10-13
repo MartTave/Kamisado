@@ -1,0 +1,32 @@
+export class WinNotification extends Aventus.WebComponent implements Aventus.DefaultComponent {
+
+	//#region static
+
+	//#endregion
+
+	public test
+	//#region props
+
+	//#endregion
+
+
+	//#region variables
+
+	//#endregion
+
+
+	//#region states
+
+	//#endregion
+			
+			
+	//#region constructor
+
+	//#endregion
+
+
+	//#region methods
+
+	//#endregion
+	
+}

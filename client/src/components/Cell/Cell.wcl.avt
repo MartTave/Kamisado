@@ -1,0 +1,63 @@
+import { DefaultTheme, Theme } from "../../lib/Themes.lib.avt";
+
+export class Cell extends Aventus.WebComponent implements Aventus.DefaultComponent {
+
+	//#region static
+
+	//#endregion
+
+
+	//#region props
+	@Property((cell:Cell) => {
+		cell.style.setProperty("--background-color", cell.theme.getColor()[cell.color_code].color);
+	})
+	public color_code:number;
+
+	@Property()
+	public highlight:boolean;
+	//#endregion
+
+
+	//#region variables
+	@Watch()
+	public theme:Theme = new DefaultTheme();
+	//#endregion
+
+
+	//#region states
+
+	//#endregion
+			
+			
+	//#region constructor
+
+	//#endregion
+
+
+	//#region methods
+	public hasPiece():boolean {
+		let children = this.children;
+		let found = false;
+		for(let i = 0; i < children.length; i++)  {
+			if(children[i].nodeName === "KA-PIECE") {
+				found = true;
+				break;
+			}
+		}
+		return found;
+	}
+
+	public tryMove() {
+
+	}
+
+	protected override postCreation(): void {
+		this.addEventListener("click", () => {
+			if(this.highlight) {
+				this.tryMove();
+			}
+		})
+	}
+	//#endregion
+	
+}

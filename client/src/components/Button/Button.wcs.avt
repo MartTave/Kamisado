@@ -1,0 +1,10 @@
+:host {
+	.button {
+        background-color: blue;
+        padding: 0 10px;
+        height: 30px;
+        .text {
+            
+        }
+    }
+}

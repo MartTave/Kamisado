@@ -1,0 +1,33 @@
+{
+	"build": [
+        {
+            "namespace": "Aventus",
+            "componentPrefix": "Av",
+            "name": "Base",
+            "version": "0.0.1",
+            "inputPath": [],
+            "outputFile": "./client/dist/base.js",
+            "generateDefinition": true,
+            "includeBase": true
+        },
+        {
+            "namespace": "Kamisado",
+            "componentPrefix": "Ka",
+            "name": "Kamisado",
+            "version": "0.0.1",
+            "inputPath": [
+                "./client/src/*"
+            ],
+            "outputFile": "./client/dist/Kamisado.js",
+            "generateDefinition": true,
+            "includeBase": false
+        }
+    ],
+    "static": [
+        {
+            "name": "static",
+            "inputPath": "./client/src/static/",
+            "outputPath": "./client/dist/"
+        }
+    ]
+}

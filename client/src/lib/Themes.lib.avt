@@ -1,0 +1,21 @@
+import { Color } from "./Color.lib.avt";
+
+export abstract class Theme {
+    abstract getColor():{0:Color, 1:Color, 2:Color, 3:Color, 4:Color, 5:Color, 6:Color, 7: Color}
+}
+
+export class DefaultTheme extends Theme {
+    getColor(): { 0: Color; 1: Color; 2: Color; 3: Color; 4: Color; 5: Color; 6: Color; 7: Color; } {
+        return {
+            0: new Color("#d67522"),
+            1: new Color("#006aac"),
+            2: new Color("#973a9e"),
+            3: new Color("#d1709d"),
+            4: new Color("#e2c200"),
+            5: new Color("#d13238"),
+            6: new Color("#008f56"),
+            7: new Color("#70462a")
+        }
+    }
+    
+}

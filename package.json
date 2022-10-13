@@ -1,0 +1,21 @@
+{
+  "name": "kamisado",
+  "version": "1.0.0",
+  "description": "Kamisado board game",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartTave/Kamisado.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartTave/Kamisado/issues"
+  },
+  "homepage": "https://github.com/MartTave/Kamisado#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

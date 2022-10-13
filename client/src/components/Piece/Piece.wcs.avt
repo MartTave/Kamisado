@@ -1,0 +1,15 @@
+:host {
+    --border-size: 30px;
+
+	background-color: var(--background-color);
+    width: calc(100%);
+    height: calc(100%);
+    border: var(--border-size) solid;
+    border-color: var(--piece-player-color);
+    border-radius: 50%;
+    opacity: var(--board-current-piece-opacity);
+}
+:host([playable]) {
+    opacity: 1;
+    cursor: pointer;
+}

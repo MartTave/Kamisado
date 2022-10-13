@@ -1,0 +1,27 @@
+:host {
+    border: solid black 2px;
+    background-color: black;
+	.board {
+        flex-direction: column;
+        width: 800px;
+        height: 800px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        .row {
+            gap: 2px;
+            height: calc(100% / 8);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            ka-cell {
+                height: 100%;
+                width: calc(100% / 8);
+                flex-grow: 1;
+                display: flex;
+            }
+        }
+    }
+}

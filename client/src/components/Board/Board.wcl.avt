@@ -1,0 +1,332 @@
+import { Piece } from "../Piece/Piece.wcl.avt";
+import { Theme } from "../../lib/Themes.lib.avt";
+import { Cell } from "../Cell/Cell.wcl.avt";
+
+export class Board extends Aventus.WebComponent implements Aventus.DefaultComponent {
+
+	//#region static
+	public static boardLayout:Array<Array<number>> = [
+		[0, 1, 2, 3, 4, 5, 6, 7],
+		[5, 0, 3, 6, 1, 4, 7, 2],
+		[6, 3, 0, 5, 2, 7, 4, 1],
+		[3, 2, 1, 0, 7, 6, 5, 4],
+		[4, 5, 6, 7, 0, 1, 2, 3],
+		[1, 4, 7, 2, 5, 0, 3, 6],
+		[2, 7, 4, 1, 6, 3, 0, 5],
+		[7, 6, 5, 4, 3, 2, 1, 0]
+	]
+	public static boardLength = 7;
+	//#endregion
+
+
+	//#region props
+
+	//#endregion
+
+
+	//#region variables
+	@ViewElement()
+	public divBoard: HTMLDivElement;
+	public currentBoard: Array<Array<Cell>> = [];
+	private theme: Theme;
+	private pieces: {[player_code:number]:Array<Piece>} = {};
+	private victoryCells:{[player_code: number]: Array<Cell>} = {};
+	private currentPlayerTurn;
+	private lastColorPlayed: number|false = false;
+	private currentPlayingPiece: Piece;
+	//#endregion
+
+
+	//#region states
+
+	//#endregion
+			
+			
+	//#region constructor
+
+	//#endregion
+
+
+	//#region methods
+	protected override postCreation(): void {
+		this.buildBoard();
+		this.startGame();
+	}
+	public buildBoard() {
+		for(let i = 0; i < Board.boardLayout.length; i++) {
+			this.currentBoard[i] = [];
+			let currentRow = Board.boardLayout[i];
+			let rowDiv = document.createElement("div");
+			rowDiv.classList.add("row");
+			for(let i2 = 0; i2 < currentRow.length; i2++) {
+				let currentColorCode = currentRow[i2];
+				let currentCell = new Cell();
+				currentCell.tryMove = () => {
+					this.tryMoveToCell(currentCell);
+				}
+				currentCell.color_code = currentColorCode;
+				this.currentBoard[i][i2] = currentCell;
+				rowDiv.appendChild(currentCell);
+			}
+			this.divBoard.appendChild(rowDiv);
+		}
+	}
+
+	public initGame() {
+		let firstRow = 0;
+		let lastRow = Board.boardLayout.length - 1;
+		this.pieces[0] = [];
+		this.pieces[1] = [];
+		this.victoryCells = {
+			0: [],
+			1: []
+		}
+		let rows = [firstRow, lastRow];
+		let index = 0;
+		rows.forEach(row => {
+			let color = "white";
+			if(index === 1) {
+				color = "black";
+			}
+			for(let i = 0; i < Board.boardLayout[row].length; i++) {
+				let currentPiece = new Piece();
+				currentPiece.piecePlaying = () => {
+					this.playingPiece(currentPiece);
+				};
+				currentPiece.style.setProperty("--piece-player-color", color);
+				currentPiece.color_code = Board.boardLayout[row][i];
+				this.currentBoard[row][i].appendChild(currentPiece);
+				this.pieces[index][i] = currentPiece;
+				this.victoryCells[1 - index].push(this.currentBoard[row][i]);
+			}
+			index++;
+		});
+	}
+
+	private refreshTheme() {
+		for(let i = 0; i < this.currentBoard.length; i++) {
+			for(let i2 = 0; i2 < this.currentBoard[i].length; i2++) {
+				this.currentBoard[i][i2].theme = this.theme;
+			}
+		}
+	}
+	public changeTheme(newTheme: Theme) {
+		this.theme = newTheme;
+		this.refreshTheme();
+	}
+
+	public startGame() {
+		this.initGame();
+		this.currentPlayerTurn = 0;
+		this.lastColorPlayed = false;
+		this.makeTurn();
+	}
+	private makeTurn() {
+		let currentPieces = this.pieces[this.currentPlayerTurn];
+		let playablePieces = currentPieces;
+		if(this.lastColorPlayed !== false) {
+			playablePieces = [];
+			for(let i = 0; i < currentPieces.length; i++) {
+				if(currentPieces[i].color_code === this.lastColorPlayed) {
+					playablePieces.push(currentPieces[i]);
+				}
+			}
+		}
+		this.style.setProperty("--board-current-piece-opacity", "0.5");
+		this.highlightPieces(playablePieces);
+	}
+	private playingPiece(piece: Piece) {
+		this.style.removeProperty("--board-current-piece-opacity");
+		this.currentPlayingPiece = piece;
+		this.style.setProperty("--board-current-cell-opacity", "0.5");
+		this.getPlayableMovesForPiece(piece);
+	}
+	private tryMoveToCell(cell: Cell) {
+		this.style.removeProperty("--board-current-cell-opacity")
+		this.currentPlayingPiece.remove();
+		cell.appendChild(this.currentPlayingPiece);
+		this.resetBoardHighlight();
+
+		if(this.checkForVictory(cell)) {
+			// Show message for victory
+		} else {
+			// init next turn
+			this.currentPlayerTurn++;
+			this.currentPlayerTurn = this.currentPlayerTurn % 2;
+			this.lastColorPlayed = cell.color_code;
+			this.makeTurn();
+		}
+	}
+	private highlightPieces(pieces: Array<Piece>) {
+		pieces.forEach(piece => {
+			piece.playable = true;
+		});
+	}
+	private getCellIndex(cell: Cell): {row: number, column: number} {
+		let index: {row: number, column: number} = {row: undefined, column: undefined};
+		for(let i = 0; i < this.currentBoard.length; i++) {
+			for(let i2 = 0; i2 < this.currentBoard[i].length; i2++) {
+				let current = this.currentBoard[i][i2];
+				if(current === cell) {
+					index.row = i;
+					index.column = i2;
+				}
+			}
+		}
+		return index;
+	}
+	private getPlayableMovesForPiece(piece: Piece) {
+		let parentCell:Cell = piece.parentElement as Cell;
+	 	let index = this.getCellIndex(parentCell);
+		this.highlightMoveFromCell(index);
+	}
+	private highlightIfEmpty(cell: Cell):boolean {
+		let hasPiece = cell.hasPiece();
+		if(!hasPiece) {
+			cell.highlight = true;
+		}
+		return hasPiece;
+	}
+	private resetBoardHighlight() {
+		for(let key in this.pieces) {
+			for(let i = 0; i < this.pieces[key].length; i++) {
+				this.pieces[key][i].playable = false;
+			}
+		}
+		for(let i = 0; i < this.currentBoard.length; i++) {
+			for(let i2 = 0; i2 < this.currentBoard[i].length; i2++) {
+				this.currentBoard[i][i2].highlight = false;
+			}
+		}
+	}
+	private highlightMoveFromCell(index:{row: number, column: number}) {
+		let column_i = 1;
+		let moveCount = 0;
+		// From current row to top
+		if(index.row !== 0) {
+			let foundPiece = {
+				above:false,
+				above_right: false,
+				above_left: false,
+			}
+			for(let i = index.row - 1; i >= 0; i--) {
+				//Check cell above
+				if(!foundPiece.above) {
+					let cell_above = this.currentBoard[i][index.column];
+					if(this.highlightIfEmpty(cell_above)) {
+						foundPiece.above = true;
+					} else {
+						moveCount++;
+					}
+				}
+				if(!foundPiece.above_left) {
+					if(index.column + column_i <= Board.boardLength) {
+						let cell_above_left = this.currentBoard[i][index.column + column_i];
+						if(this.highlightIfEmpty(cell_above_left)) {
+							foundPiece.above_left = true;
+						} else {
+							moveCount++;
+						}
+					}
+				}
+				if(!foundPiece.above_right) {
+					if(index.column - column_i >= 0) {
+						let cell_above_right = this.currentBoard[i][index.column - column_i];
+						if(this.highlightIfEmpty(cell_above_right)) {
+							foundPiece.above_right = true;
+						} else {
+							moveCount++;
+						}
+					}
+				}
+				column_i++;
+			}
+		}
+		column_i = 1;
+		//From current row to bottom
+		if(index.row !== Board.boardLength) {
+			let foundPiece = {
+				below: false,
+				below_right: false,
+				below_left: false
+			}
+			for(let i = index.row + 1; i <= Board.boardLength; i++) {
+				if(!foundPiece.below) {
+					let cellBelow = this.currentBoard[i][index.column];
+					if(this.highlightIfEmpty(cellBelow)) {
+						foundPiece.below = true;
+					} else {
+						moveCount++;
+					}
+				}
+				if(!foundPiece.below_left) {
+					if(index.column + column_i <= Board.boardLength) {
+						let cell_below_left = this.currentBoard[i][index.column + column_i];
+						if(this.highlightIfEmpty(cell_below_left)) {
+							foundPiece.below_left = true;
+						}
+					} else {
+						moveCount++;
+					}
+				}
+				if(!foundPiece.below_right) {
+					if(index.column - column_i >= 0) {
+						let cell_below_right = this.currentBoard[i][index.column - column_i];
+						if(this.highlightIfEmpty(cell_below_right)) {
+							foundPiece.below_right = true;
+						}
+					} else {
+						moveCount++;
+					}
+				}
+				column_i++;
+			}
+		}
+
+		// From current column to left
+		if(index.column !== 0) {
+			for(let i = index.column; i >= 0; i--) {
+				let currentCell = this.currentBoard[index.row][i];
+				if(this.highlightIfEmpty(currentCell)) {
+					break;
+				} else {
+					moveCount++;
+				}
+			}
+		}
+
+		//From current column to right
+		if(index.column !== Board.boardLength) {
+			for(let i = index.column; i <= Board.boardLength; i++) {
+				let currentCell = this.currentBoard[index.row][i];
+				if(this.highlightIfEmpty(currentCell)) {
+					break;
+				} else {
+					moveCount++;
+				}
+			}
+		}
+
+		if(moveCount === 0) {
+			console.log("No move found. This player has lost");
+		}
+	}
+	private checkForVictory(cell: Cell) {
+		let currentVictoryCells = this.victoryCells[this.currentPlayerTurn];
+		let victory: boolean = false;
+		for(let i = 0; i < currentVictoryCells.length; i++) {
+			let current = currentVictoryCells[i];
+			if(current === cell) {
+				victory = true;
+				break;
+			}
+		}
+		if(victory) {
+			console.log("Player ", this.currentPlayerTurn + 1, " has won")
+		}
+		return victory;
+	}
+
+	//#endregion
+	
+}

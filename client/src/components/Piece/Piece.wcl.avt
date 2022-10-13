@@ -1,0 +1,51 @@
+import { DefaultTheme, Theme } from "../../lib/Themes.lib.avt";
+
+export class Piece extends Aventus.WebComponent implements Aventus.DefaultComponent {
+
+	//#region static
+
+	//#endregion
+
+
+	//#region props
+	@Property((piece: Piece) => {
+		piece.style.setProperty("--background-color", piece.theme.getColor()[piece.color_code].color);
+	})
+	public color_code:number;
+	@Property()
+	public playable: boolean;
+	//#endregion
+
+
+	//#region variables
+	@Watch()
+	public theme:Theme = new DefaultTheme();
+	//#endregion
+
+
+	//#region states
+
+	//#endregion
+			
+			
+	//#region constructor
+
+	//#endregion
+
+
+	//#region methods
+
+	public piecePlaying() {
+
+	}
+
+	protected override postCreation(): void {
+		this.addEventListener("click", () => {
+			if(this.playable) {
+				this.piecePlaying();
+			}
+		})
+	}
+	//#endregion
+	
+}

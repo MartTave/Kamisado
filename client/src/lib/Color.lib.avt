@@ -1,0 +1,15 @@
+export class Color {
+	
+    private _color:string;
+
+    constructor(hexColor: string) {
+        this.color = hexColor;
+    }
+    
+    public get color(): string {
+        return this._color;
+    }
+    public set color(hexCode: string) {
+        this._color = hexCode;
+    }
+}

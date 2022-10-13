@@ -1,0 +1,9 @@
+<div class="notification">
+    <div class="text"></div>
+    <div class="action">
+        <ka-button>Retry</ka-button>
+    </div>
+</div>
+<div class="background">
+
+</div>
