@@ -4,6 +4,6 @@
         <ka-button>Retry</ka-button>
     </div>
 </div>
-<div class="background">
+<div class="background" @click="backgroundClicked">
 
 </div>

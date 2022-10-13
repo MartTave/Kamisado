@@ -1,3 +1,49 @@
 :host {
-	
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+	.background {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        opacity: 0.8;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .notification {
+        position: relative;
+        background-color: white;
+        border-color: lightslategray;
+        box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+        z-index: 2;
+        width: 800px;
+        height: 300px;
+        border-radius: 10px;
+
+        padding: 20px;
+
+        .text {
+            height: 80%;
+            width: 100%;
+        }
+        .action {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 20%;
+        }
+    }
+}
+
+:host(:not([show])) {
+    display: none;
+    z-index: -1;
 }

@@ -1,11 +1,61 @@
 // Color theme : https://coolors.co/48beff-3dfaff-43c59e-3d7068-14453d
 
+@font-face {
+    font-family: "InterTight";
+    font-weight: 100;
+    src: url("/font/inter_tight/thin.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 200;
+    src: url("/font/inter_tight/extralight.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 300;
+    src: url("/font/inter_tight/light.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 400;
+    src: url("/font/inter_tight/regular.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 500;
+    src: url("/font/inter_tight/medium.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 600;
+    src: url("/font/inter_tight/semibold.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 700;
+    src: url("/font/inter_tight/bold.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 800;
+    src: url("/font/inter_tight/extrabold.ttf");
+}
+@font-face {
+    font-family: "InterTight";
+    font-weight: 900;
+    src: url("/font/inter_tight/black.ttf");
+}
 html {
-    --color1: #48BEFF;
-    --color2: #3DFAFF;
-    --color3: #43C59E;
-    --color4: #3D7068;
-    --color5: #14453D;
-    --primary: var(--color1);
-    --secondary: var(--color2);
+    --font-color-1: #FEFEFC;
+    --primary: "#D097B2";
+    --secondary: "#A8A7A3";
+}
+html {
+    body {
+        margin: 0;
+        font-family: "InterTight";
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
 }

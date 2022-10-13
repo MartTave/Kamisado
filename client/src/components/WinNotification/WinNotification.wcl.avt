@@ -4,9 +4,9 @@ export class WinNotification extends Aventus.WebComponent implements Aventus.Def
 
 	//#endregion
 
-	public test
 	//#region props
-
+	@Property()
+	public show:boolean;
 	//#endregion
 
 
@@ -26,7 +26,9 @@ export class WinNotification extends Aventus.WebComponent implements Aventus.Def
 
 
 	//#region methods
-
+	public backgroundClicked() {
+		this.show = false;
+	}
 	//#endregion
 	
 }

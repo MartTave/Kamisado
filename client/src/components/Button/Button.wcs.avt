@@ -1,10 +1,18 @@
 :host {
+    --internal-button-background-color: var(--button-background-color, var(--primary-color));
+    --internal-button-font-color: var(--button-font-color, var(--font-color-1));
+}
+
+:host {
 	.button {
-        background-color: blue;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: var(--internal-button-background-color);
+        color: var(--internal-button-font-color);
         padding: 0 10px;
         height: 30px;
-        .text {
-            
-        }
     }
 }
