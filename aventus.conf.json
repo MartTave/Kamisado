@@ -1,8 +1,8 @@
 {
+    "module": "Aventus",
+    "componentPrefix": "Ka",
 	"build": [
         {
-            "namespace": "Aventus",
-            "componentPrefix": "Av",
             "name": "Base",
             "version": "0.0.1",
             "inputPath": [],
@@ -11,8 +11,6 @@
             "includeBase": true
         },
         {
-            "namespace": "Kamisado",
-            "componentPrefix": "Ka",
             "name": "Kamisado",
             "version": "0.0.1",
             "inputPath": [
